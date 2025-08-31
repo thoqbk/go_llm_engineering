@@ -7,14 +7,18 @@ from bs4 import BeautifulSoup
 from openai import OpenAI
 
 load_dotenv(override=True)
-api_key = os.getenv("OPENAI_API_KEY")
-if api_key and api_key.startswith("sk-proj-") and len(api_key) > 20:
-    print("API key looks good so far")
-else:
-    print("There might be an issue with your API key")
 
-MODEL = "gpt-4o-mini"
-openai = OpenAI()
+# MODEL = "gpt-4o-mini"
+MODEL = "llama3.2"
+if MODEL.startswith("gpt-"):
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key and api_key.startswith("sk-proj-") and len(api_key) > 20:
+        print("API key looks good so far")
+    else:
+        print("There might be an issue with your API key")
+    openai = OpenAI()
+else:
+    openai = OpenAI(base_url='http://localhost:11434/v1', api_key='ollama')
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
