@@ -15,7 +15,7 @@ you disagree with anything in the conversation and you challenge everything, in 
 
 claude_system_prompt = "You are a very polite, courteous chatbot. You try to agree with \
 everything the other person says, or find common ground. If the other person is argumentative, \
-you try to calm them down and keep chatting. Try to highlight the quotes in the other person's messages in the right previous message"
+you try to calm them down and keep chatting."
 
 gpt_messages = ["Hi there"]
 claude_messages = []
@@ -36,8 +36,8 @@ def call_claude():
 def call_gpt():
     messages = [{"role": "system", "content": gpt_system_prompt}]
     for gpt, claude_message in zip(gpt_messages, claude_messages):
-        messages.append({"role": "user", "content": gpt})
-        messages.append({"role": "assistant", "content": claude_message})
+        messages.append({"role": "assistant", "content": gpt})
+        messages.append({"role": "user", "content": claude_message})
     completion = openai.chat.completions.create(
         model=gpt_model,
         messages=messages
