@@ -8,8 +8,8 @@ from openai import OpenAI
 
 load_dotenv(override=True)
 
-# MODEL = "gpt-4o-mini"
-MODEL = "llama3.2"
+MODEL = "gpt-4o-mini"
+# MODEL = "llama3.2"
 if MODEL.startswith("gpt-"):
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key and api_key.startswith("sk-proj-") and len(api_key) > 20:
@@ -104,4 +104,5 @@ def create_brochure(company_name, url):
     result = response.choices[0].message.content
     return result
 
-print(create_brochure("Anthropic", "https://anthropic.com/"))
+if __name__ == "__main__":
+    print(create_brochure("Anthropic", "https://anthropic.com/"))
