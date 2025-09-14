@@ -8,7 +8,7 @@ load_dotenv(override=True)
 MODEL = "gpt-4o-mini"
 openai = OpenAI()
 
-ticket_prices = {"london": 100, "paris": 120, "new york": 200, "tokyo": 300, "sydney": 250}
+ticket_prices = {"london": 100, "paris": 120, "new york": 200, "tokyo": 300, "sydney": 250, "singapore": 300, "hanoi": 300}
 
 def get_ticket_price(destination_city):
     city = destination_city.lower()
@@ -41,7 +41,7 @@ def handle_tool_call(message):
         "role": "tool",
         "content": json.dumps({"destination_city": city, "price": price}),
         "tool_call_id": tool_call.id
-    }
+    }, city
 
 system_message = """You are a helpful assistant for an Airline called FlightAI
 Give short, courteous answers, no more than 1 sentence.
@@ -52,10 +52,11 @@ def chat_with_tools(message, history):
     response = openai.chat.completions.create(model=MODEL, messages=messages, tools=tools)
     if response.choices[0].finish_reason == "tool_calls":
         message = response.choices[0].message
-        response = handle_tool_call(message)
+        response, city = handle_tool_call(message)
         messages.append(message)
         messages.append(response)
         response = openai.chat.completions.create(model=MODEL, messages=messages)
     return response.choices[0].message.content
 
-gr.ChatInterface(fn=chat_with_tools, type="messages").launch()
+if __name__ == "__main__":
+    gr.ChatInterface(fn=chat_with_tools, type="messages").launch()
